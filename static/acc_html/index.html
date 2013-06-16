@@ -1,0 +1,725 @@
+﻿<!DOCTYPE html> 
+
+<html> 
+
+<head> 
+    <title>交通事故快速处理系统</title> 
+	
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+
+    <link rel="stylesheet" href="js/jquery.mobile.structure-1.3.1.min.css" />
+    <link rel="stylesheet" href="js/jquery.mobile.theme-1.3.1.min.css" />
+    
+    <script type="text/javascript" charset="utf-8" src="cordova-2.7.0.js"></script>
+    
+	<script src="js/jquery-1.7.1.min.js"></script>
+    <script  src="js/jquery.mobile-1.3.1.min.js"></script>
+	
+	<script src="js/utils.js"></script>
+	<script   src="js/page_alarm.js"></script>
+	<script   src="js/page_choosetype.js"></script>
+	<script   src="js/page_setup.js"></script>
+	<script   src="js/page_status.js"></script>
+	<script   src="js/page_confirm.js"></script>
+	<script   src="js/page_takephotos.js"></script>
+    <script   src="js/page_commitstate.js"></script>
+    <script   src="js/page_handleresult.js"></script>
+    
+    
+	
+	
+	
+	
+	<script>
+	var MyMobile="13810034567";
+	var ServerIP="192.168.0.105";
+	var ServerPort="8080";
+	$(document).ready(function(){
+		Page_Alarm_Init();
+		Page_Setup_Init();
+		Page_Status_Init();
+		Page_Confirm_Init();
+		Page_ChooseType_Init();
+		Page_TakePhotos_Init();
+        Page_CommitState_Init();
+        Page_HandleResult_Init();
+	    	
+});
+    
+    //$(document).bind("mobileinit",function(){ $.mobile.allowCrossDomainPages = true; });
+    //app.initialize();
+	</script>
+   
+
+
+</head> 
+
+
+<body> 
+ 
+
+
+
+
+<div data-role="page" id="page01" >
+	<div data-role="header" data-position="fixed">
+    	<h1>事故快速处理</h1>
+		<a href="#page01" data-icon="home" data-iconpos="notext" data-direction="reverse">主页</a>
+		<a href="#page_Setup" data-icon="gear" data-iconpos="notext" >设置</a>
+    </div>
+    <div data-role="content">
+	    <img src="img/hmjz.jpeg" width="100%"  height="350px" >
+          
+        </img>
+        
+        
+	</div>
+	<div data-role="footer" data-position="fixed">
+       
+	   	<div data-role="navbar">
+			<ul>
+				<li><a href="#page_alarm" data-icon="alert">报案</a></li>
+				<li><a href="#page_Confirm" data-icon="star">确认</a></li>
+				<li><a href="#page_ChooseType" data-icon="grid">照相</a></li>
+				<li><a href="#page_Status" data-icon="info">状态</a></li>
+			
+			</ul>
+		</div><!-- /navbar -->
+    
+
+    </div>
+	
+</div>
+<div data-role="page" id="page_Setup">
+
+    <div data-role="header"  data-position="fixed">
+       <h1>事故快速处理</h1>
+        <a href="#page01" data-icon="home" data-iconpos="notext" data-direction="reverse">主页</a>
+        <a href="#page_Setup" data-icon="gear" data-iconpos="notext" >设置</a>
+   
+    </div>
+
+    <div data-role="content">
+        <div data-role="fieldcontain">
+        
+            <label for="ServerIP">
+                服务器地址：
+            </label>
+            <input name="" id="ServerIP" placeholder="" value="192.168.1.115"
+            type="text" data-mini="true"/>
+            
+            <label for="MyPhoneNo">
+                服务器端口：
+            </label>
+            <input name="" id="ServerPort" placeholder="" value="8080"
+            type="text" data-mini="true"/>
+            
+            <label for="MyPhoneNo">
+                我的手机号码：
+            </label>
+            <input name="" id="MyPhoneNo" placeholder="" value=""
+            type="text" data-mini="true"/>
+            
+            
+            <label for="about">
+                关于
+            </label>
+            <input name="" id="about" placeholder="" value="中鸿信达，版权所有"
+            type="text" readonly="true" data-mini="true"/>
+            <a data-role="button" id="Page_Setup_OK">确定</a>
+        </div>   
+    </div>
+    <div data-role="footer" data-position="fixed">
+       
+        <div data-role="navbar">
+            <ul>
+                
+                <li><a href="#page_alarm" data-icon="alert">报案</a></li>
+                <li><a href="#page_Confirm" data-icon="star">确认</a></li>
+                <li><a href="#page_ChooseType" data-icon="grid">照相</a></li>
+                <li><a href="#page_Status" data-icon="info">状态</a></li>
+            
+            </ul>
+        </div><!-- /navbar -->
+    
+
+    </div>
+
+</div>
+<div data-role="page" id="page_Confirm">
+ 	<div data-role="header" data-position="fixed">
+       <h1>事故快速处理</h1>
+	   <a href="#page01" data-icon="home" data-iconpos="notext" data-direction="reverse">主页</a>
+		<a href="#page_Setup" data-icon="gear" data-iconpos="notext" >设置</a>
+    </div>
+	<div data-role="content">
+		<form action="">
+		<div data-role="fieldcontain">
+            <label id="Page_Confirm_Msg">
+                您需要先设置您的手机号码，<BR/>点击右上角的设置按钮<BR/>
+            </label>
+		</div>
+		<div data-role="fieldcontain" id="Page_Confirm_OpeateDiv">
+        	<label for="Page_Confirm_EngineNo">
+                请输入您的发动机号码，予以确认！
+            </label>
+            <input name="" id="Page_Confirm_EngineNo" placeholder="" value="GX234587" type="text"
+            data-mini="true" />
+        
+        <a data-role="button" id="Page_Confirm_Yes">我确认以上信息正确</a>
+        <a data-role="button" id="Page_Confirm_No">以上信息和我无关!</a>
+        </div>
+            
+            
+        </form>
+	</div>
+	<div data-role="footer" data-position="fixed">
+       
+	   	<div data-role="navbar">
+			<ul>
+				
+				<li><a href="#page_alarm" data-icon="alert">报案</a></li>
+				<li><a href="#page_Confirm" data-icon="star">确认</a></li>
+				<li><a href="#page_ChooseType" data-icon="grid">照相</a></li>
+				<li><a href="#page_Status" data-icon="info">状态</a></li>
+			
+			</ul>
+		</div><!-- /navbar -->
+    
+
+    </div>
+	
+	   
+</div>
+<div data-role="page" id="page_alarm" >
+
+    <div data-role="header" data-position="fixed">
+       <h1>事故快速处理</h1>
+	   <a href="#page01" data-icon="home" data-iconpos="notext" data-direction="reverse">主页</a>
+	   <a href="#page_Setup" data-icon="gear" data-iconpos="notext" >设置</a>
+    </div>
+
+    <div data-role="content">
+       
+
+	    <form action="">
+		<div data-role="fieldcontain">
+            <label id="currentDateTime1">
+                案发时间：【当前时间】
+            </label>
+			</div>
+			<div data-role="fieldcontain">
+        
+            <label id="currentPosition1">
+                案发地点：【当前地点】
+            </label>
+			</div>
+            
+			
+            <div data-role="fieldcontain">
+        
+			<label for="Page_Alarm_UserA_Phone">
+                报案人手机号码：
+            </label>
+            <input name="" id="Page_Alarm_UserA_Phone" placeholder="" value="13810023456"
+            type="text" data-mini="true"/>
+            <label for="Page_Alarm_UserA_LicenseNo">
+                报案人驾驶证号码
+            </label>
+            <input name="" id="Page_Alarm_UserA_LicenseNo" placeholder="" value="101111198006040213"
+            type="text" data-mini="true"/>
+            <label for="Page_Alarm_UserA_CarNo">
+                报案人车牌号码
+            </label>
+            <input name="" id="Page_Alarm_UserA_CarNo" placeholder="" value="京CS1478" type="text"
+            data-mini="true">
+        </div>
+        <a href="#page03" data-role="button">继续</a>
+            
+            
+        </form>
+		
+       </p>
+	   
+
+    </div>
+
+    <div data-role="footer" data-position="fixed">
+       
+	   	<div data-role="navbar">
+			<ul>
+				
+				<li><a href="#page_alarm" data-icon="alert">报案</a></li>
+				<li><a href="#page_Confirm" data-icon="star">确认</a></li>
+				<li><a href="#page_ChooseType" data-icon="grid">照相</a></li>
+				<li><a href="#page_Status" data-icon="info">状态</a></li>
+			
+			</ul>
+		</div><!-- /navbar -->
+    
+
+    </div>
+</div>
+<div data-role="page" id="page03" >
+
+    <div data-role="header" data-position="fixed">
+	
+       <h1>事故快速处理</h1>
+	   <a href="#page01" data-icon="home" data-iconpos="notext" data-direction="reverse">主页</a>
+		<a href="#page_Setup" data-icon="gear" data-iconpos="notext" >设置</a>
+    </div>
+
+    <div data-role="content">
+       <form action="">
+		<div data-role="fieldcontain">
+            <label id="currentDateTime2">
+                案发时间：【当前时间】
+            </label>
+			</div>
+		<div data-role="fieldcontain">
+        
+            <label id="currentPosition2">
+                案发地点：【当前地点】
+            </label>
+			</div>
+    	<div data-role="fieldcontain">
+        
+			<label for="Page03_UserB_Phone">
+                对方手机号码
+            </label>
+            <input name="" id="Page03_UserB_Phone" placeholder="" value="13810034567" type="text"
+            data-mini="true"/>
+            <label for="Page03_UserB_LicenseNo">
+                对方驾驶证号码
+            </label>
+            <input name="" id="Page03_UserB_LicenseNo" placeholder="" value="101111198006050214"
+            type="text" data-mini="true"/>
+            <label for="Page03_UserB_CarNo"/>
+                对方车牌号码
+            </label>
+            <input name="" id="Page03_UserB_CarNo" placeholder="" value="京G24980" type="text"
+            data-mini="true"/>
+        </div>
+		<div class="ui-grid-a">
+            <div class="ui-block-a">
+			<a href="#page_alarm" data-role="button">返回</a>
+            </div>
+            <div class="ui-block-b">
+			<a href="#" data-role="button" id="btnCreateCase">提交</a>
+            </div>
+        </div>
+        </form>
+		
+      
+    </div>
+
+    <div data-role="footer" data-position="fixed">
+       
+	   	<div data-role="navbar">
+			<ul>
+				
+				<li><a href="#page_alarm" data-icon="alert">报案</a></li>
+				<li><a href="#page_Confirm" data-icon="star">确认</a></li>
+				<li><a href="#page_ChooseType" data-icon="grid">照相</a></li>
+				<li><a href="#page_Status" data-icon="info">状态</a></li>
+			
+			</ul>
+		</div><!-- /navbar -->
+    
+
+    </div>
+</div>
+<div data-role="page" id="page_ChooseType" >
+
+    <div data-role="header" data-position="fixed">
+       <h1>事故快速处理</h1>
+	<a href="#page01" data-icon="home" data-iconpos="notext" data-direction="reverse">主页</a>
+	<a href="#page_Setup" data-icon="gear" data-iconpos="notext" >设置</a> </div>
+
+    <div data-role="content">
+		<label id="Page_ChooseType_Msg"></br>1.追尾</br></label>
+	
+		<div id="Page_ChooseType_Content">
+	
+        <img id="img" src="img/05-21.png" width="100%"  height="200px">
+        <div class="ui-grid-b">
+            <div class="ui-block-a">
+                <a data-role="button"  id="prior">
+                    向前
+                </a>
+            </div>
+            <div class="ui-block-b">
+                <a data-role="button" href="#page_TakePhotos">选定</a>
+            </div>
+            <div class="ui-block-c">
+                <a data-role="button" id="next">
+                    向后
+                </a>
+            </div>
+        </div>
+    </div>
+	</div>
+	<div data-role="footer" data-position="fixed">
+       
+	   	<div data-role="navbar">
+			<ul>
+				
+				<li><a href="#page_alarm" data-icon="alert">报案</a></li>
+				<li><a href="#page_Confirm" data-icon="star">确认</a></li>
+				<li><a href="#page_ChooseType" data-icon="grid">照相</a></li>
+				<li><a href="#page_Status" data-icon="info">状态</a></li>
+			
+			</ul>
+		</div><!-- /navbar -->
+    
+
+    </div>
+    
+</div>
+<div data-role="page" id="page_TakePhotos" >
+
+    <div data-role="header" data-position="fixed">
+       <h1>事故快速处理</h1>
+	   <a href="#page01" data-icon="home" data-iconpos="notext" data-direction="reverse">主页</a>
+		<a href="#page_Setup" data-icon="gear" data-iconpos="notext" >设置</a>
+    </div>
+
+    <div data-role="content">
+	<label></br></label><label id="lbdesp">请按照图示进行拍照，[车头45°]</label><label></br></label>
+       
+            <img id="img" src="img/05-01.png" alt="image"  width="100%"  height="200px"/>
+       
+        <div class="ui-grid-b">
+            <div class="ui-block-a">
+                <a data-role="button"  id="photolib">
+                    相册
+                </a>
+            </div>
+            <div class="ui-block-b">
+                <a data-role="button" id="Page_TakePhotos_ButtonTakePhoto">拍照</a>
+            </div>
+            <div class="ui-block-c">
+                <a data-role="button" id="Page_TakePhotos_ButtonIgnore">
+                    忽略
+                </a>
+            </div>
+        </div>
+    </div>
+	<div data-role="footer" data-position="fixed">
+       
+	   	<div data-role="navbar">
+			<ul>
+				
+				<li><a href="#page_alarm" data-icon="alert">报案</a></li>
+				<li><a href="#page_Confirm" data-icon="star">确认</a></li>
+				<li><a href="#page_ChooseType" data-icon="grid">照相</a></li>
+				<li><a href="#page_Status" data-icon="info">状态</a></li>
+			
+			</ul>
+		</div><!-- /navbar -->
+    
+
+    </div>
+  
+
+    
+</div>
+
+<div data-role="page" id="page_CommitState" >
+
+    <div data-role="header" data-position="fixed">
+       <h1>事故快速处理</h1>
+       <a href="#page01" data-icon="home" data-iconpos="notext" data-direction="reverse">主页</a>
+        <a href="#page_Setup" data-icon="gear" data-iconpos="notext" >设置</a>
+    </div>
+
+    <div data-role="content">
+    <label></br></label><label id="Page_CommitState_Msg">您确认不上传任何照片吗？</label><label></br></label>
+       
+           
+       
+        <div class="ui-grid-a">
+            <div class="ui-block-a">
+                <a data-role="button"  id="Page_CommitState_Execute">
+                    上传  
+                </a>
+            </div>
+            <div class="ui-block-b">
+                <a data-role="button" id="Page_CommitState_Redo" href="#page_ChooseType">重拍</a>
+            </div>
+            
+        </div>
+    </div>
+    <div data-role="footer" data-position="fixed">
+       
+        <div data-role="navbar">
+            <ul>
+                
+                <li><a href="#page_alarm" data-icon="alert">报案</a></li>
+                <li><a href="#page_Confirm" data-icon="star">确认</a></li>
+                <li><a href="#page_ChooseType" data-icon="grid">照相</a></li>
+                <li><a href="#page_Status" data-icon="info">状态</a></li>
+            
+            </ul>
+        </div><!-- /navbar -->
+    
+
+    </div>
+  
+
+    
+</div>
+
+
+<div data-role="page" id="page_Status" >
+
+    <div data-role="header" data-position="fixed">
+       <h1>事故快速处理</h1>
+	   	<a href="#page01" data-icon="home" data-iconpos="notext" data-direction="reverse">主页</a>
+		<a href="#page_Setup" data-icon="gear" data-iconpos="notext" >设置</a>
+   
+	   
+    </div>
+
+    <div data-role="content">
+		<label id="Page_Status_Msg">
+		        您需要先设置您的手机号码，<BR/>点击右上角的设置按钮<BR/>
+				
+        </label>
+            
+           
+       
+        <a data-role="button"  id="Page_Status_Refresh">
+                    刷新
+        </a>
+    </div>    
+    <div data-role="footer" data-position="fixed">
+       
+	   	<div data-role="navbar">
+			<ul>
+				
+				<li><a href="#page_alarm" data-icon="alert">报案</a></li>
+				<li><a href="#page_Confirm" data-icon="star">确认</a></li>
+				<li><a href="#page_ChooseType" data-icon="grid">照相</a></li>
+				<li><a href="#page_Status" data-icon="info">状态</a></li>
+			
+			</ul>
+		</div><!-- /navbar -->
+    
+
+    </div>
+  
+</div>
+<div data-role="page" id="page_HandleResult">
+
+    <div data-role="header"  data-position="fixed">
+       <h1>事故快速处理</h1>
+	   	<a href="#page01" data-icon="home" data-iconpos="notext" data-direction="reverse">主页</a>
+		<a href="#page_Setup" data-icon="gear" data-iconpos="notext" >设置</a>
+   
+    </div>
+
+    <div data-role="content">
+	<label></br></label><div data-role="fieldcontain">
+            <label for="textarea1">
+                您的案件已经处理完成，结果如下...<BR/>
+            </label>
+			<label id="Page_HandleResult_CaseNo">
+                案件号：XXXXXX<BR/>
+			 </label>
+			<label id="Page_HandleResult_UserA">
+            
+				驾驶员A：XXX 车号 京CT1478 70%的责任<BR/>
+			 </label>
+			<label id="Page_HandleResult_UserB">
+            
+				驾驶员B：XXX 车号 京G24980 30%的责任<BR/>
+				
+            </label>
+            
+           
+        </div>
+               <div class="ui-grid-a">
+            <div class="ui-block-a">
+				<a data-role="button" id="Page_HandleResult_ButtonConfirm">确认</a>
+                
+            </div>
+            <div class="ui-block-b">
+                <a data-role="button" id="Page_HandleResult_ButtonRefuse">申请现场处理</a>
+            </div>
+        </div>
+		    
+        
+    </div>    
+    <div data-role="footer" data-position="fixed">
+       
+	   	<div data-role="navbar">
+			<ul>
+				
+				<li><a href="#page_alarm" data-icon="alert">报案</a></li>
+				<li><a href="#page_Confirm" data-icon="star">确认</a></li>
+				<li><a href="#page_ChooseType" data-icon="grid">照相</a></li>
+				<li><a href="#page_Status" data-icon="info">状态</a></li>
+			
+			</ul>
+		</div><!-- /navbar -->
+    
+
+    </div>
+
+</div>
+<div data-role="page" id="page10" >
+
+    <div data-role="header" data-position="fixed">
+       <h1>事故快速处理</h1>
+	   	<a href="#page01" data-icon="home" data-iconpos="notext" data-direction="reverse">主页</a>
+		<a href="#page_Setup" data-icon="gear" data-iconpos="notext" >设置</a>
+   
+    </div>
+
+    <div data-role="content">
+	<label></br></label><div data-role="fieldcontain">
+            <label for="textarea1">
+                您的案件图片不足（或不清晰），请重新拍照提交..<BR/>
+            </label>
+			<label>
+                案件号：XXXXXX<BR/>
+				1.局部图不清晰<BR/>
+				2.鸟瞰图缺失<BR/>
+            </label>
+            
+           
+        </div>
+                 <a data-role="button"  href="#page_TakePhotos">
+                    重新拍照
+                </a>
+    </div>    
+    <div data-role="footer" data-position="fixed">
+       
+	   	<div data-role="navbar">
+			<ul>
+				
+				<li><a href="#page_alarm" data-icon="alert">报案</a></li>
+				<li><a href="#page_Confirm" data-icon="star">确认</a></li>
+				<li><a href="#page_ChooseType" data-icon="grid">照相</a></li>
+				<li><a href="#page_Status" data-icon="info">状态</a></li>
+			
+			</ul>
+		</div><!-- /navbar -->
+    
+
+    </div>
+
+</div>
+<div data-role="page" id="page_Finished">
+
+    <div data-role="header"  data-position="fixed">
+       <h1>事故快速处理</h1>
+	   	<a href="#page01" data-icon="home" data-iconpos="notext" data-direction="reverse">主页</a>
+		<a href="#page_Setup" data-icon="gear" data-iconpos="notext" >设置</a>
+   
+    </div>
+
+    <div data-role="content">
+	<label></br></label><div data-role="fieldcontain">
+            <label for="textarea1">
+                本次案件处理完毕，<BR/>处理结果双方认可，<BR/>请迅速离开案发现场，<BR/>保证道路车流畅通<BR/>
+            </label>
+			<label>
+                感谢您使用本系统<BR/>
+				再见！<BR/>
+				
+            </label>
+            
+           
+        </div>
+                <a data-role="button"  id="prior">
+                    提交保险公司
+                </a>
+				
+    </div>    
+    <div data-role="footer" data-position="fixed">
+       
+	   	<div data-role="navbar">
+			<ul>
+				
+				<li><a href="#page_alarm" data-icon="alert">报案</a></li>
+				<li><a href="#page_Confirm" data-icon="star">确认</a></li>
+				<li><a href="#page_ChooseType" data-icon="grid">照相</a></li>
+				<li><a href="#page_Status" data-icon="info">状态</a></li>
+			
+			</ul>
+		</div><!-- /navbar -->
+    
+
+    </div>
+
+</div>
+
+<div data-role="page" id="page_Abfinished">
+
+    <div data-role="header"  data-position="fixed">
+       <h1>事故快速处理</h1>
+        <a href="#page01" data-icon="home" data-iconpos="notext" data-direction="reverse">主页</a>
+        <a href="#page_Setup" data-icon="gear" data-iconpos="notext" >设置</a>
+   
+    </div>
+
+    <div data-role="content">
+    <label></br></label><div data-role="fieldcontain">
+            <label for="textarea1">
+                用户要求需要现场处理，<BR/>请在原地耐心等待，<BR/>
+                交警将赶往现场<BR/>
+            </label>
+            <label>
+                感谢您使用本系统<BR/>
+                再见！<BR/>
+                
+            </label>
+            
+           
+           
+    <div data-role="footer" data-position="fixed">
+       
+        <div data-role="navbar">
+            <ul>
+                
+                <li><a href="#page_alarm" data-icon="alert">报案</a></li>
+                <li><a href="#page_Confirm" data-icon="star">确认</a></li>
+                <li><a href="#page_ChooseType" data-icon="grid">照相</a></li>
+                <li><a href="#page_Status" data-icon="info">状态</a></li>
+            
+            </ul>
+        </div><!-- /navbar -->
+    
+
+    </div>
+
+</div>
+
+
+
+<div data-role="page" class="type-interior">
+		<div data-role="content" class="ui-body">
+			<div class="content-secondary">
+				<div data-role="popup" id="popupMessage" class="ui-content" style="max-width:280px">
+			         <a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+			         <p  id="popupMessageText">Msg.</p>
+				</div>
+
+				<div data-role="popup" id="MessageDialog" data-overlay-theme="a" data-theme="c" style="max-width:400px;" class="ui-corner-all">
+					<div data-role="header" data-theme="a" class="ui-corner-top">
+					   <h1 id="MessageDialog_Title">消息</h1>
+				    </div>
+				    <div data-role="content" data-theme="d" class="ui-corner-bottom ui-content">
+				        <p id="MessageDialog_Message">消息文本</p>
+				        <a href="#" data-role="button" data-inline="true" data-rel="back" data-theme="c">Cancel</a>    
+        				<a href="#" data-role="button" data-inline="true" data-rel="back" data-transition="flow" data-overlay-theme="b">确定</a>  
+			        </div>
+		        </div>
+			</div>
+		</div>
+	
+</div>
+</body>
+</html>

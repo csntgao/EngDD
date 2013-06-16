@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>交通事故快速处理警务工作站</title>
+	<link rel="stylesheet" type="text/css" href="themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="themes/icon.css">
+	<link rel="stylesheet" type="text/css" href="demo/demo.css">
+
+	<style type="text/css">
+body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;}
+#l-map{height:100%;width:78%;float:left;border-right:2px solid #bcbcbc;}
+#r-result{height:100%;width:20%;float:left;}
+</style>
+
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.5&ak=3b6ae31136f0f27065389b3ba7f8e0a8"></script>
+
+	<script>
+
+	
+		var PictTexts=["[车头45°]","[车尾45°]","[全瞰图]","[局部图]","[补充图]"];
+
+		var acctexts=new Array();
+		acctexts[0]="追尾";
+		acctexts[1]="逆行";
+		acctexts[2]="倒车";
+		acctexts[3]="溜车";
+		acctexts[4]="开关车门";
+		acctexts[5]="违反交通信号的（之一“闯红灯”）";
+		acctexts[6]="违反交通信号的（之二“掉头”）";
+		acctexts[7]="违反交通信号的（之三“驶入专用车道”） ";
+		acctexts[8]="违反交通信号的（之四“未按指示方向通行”）";
+		acctexts[9]="违反交通信号的（之五“驶入禁行道路”）";
+		acctexts[10]="违反交通信号的（之六“未服从交通警察指挥”）";
+		acctexts[11]="未按规定让行的（之一“未让特种车”）";
+		acctexts[12]="未按规定让行的（之二“变更车道”）"; 
+		acctexts[13]="未按规定让行的（之三“障碍路段未让行”）";
+		acctexts[14]="未按规定让行的（之四“障碍路段未让行”）";
+		acctexts[15]="未按规定让行的（之五“坡路未让行”）";  
+		acctexts[16]="未按规定让行的（之六“坡路未让行”）";
+		acctexts[17]="未按规定让行的（之七“狭窄山路未让行”）"; 
+		acctexts[18]="未按规定让行的（之八“超正在左转弯车”）";
+		acctexts[19]="未按规定让行的（之九“超正在掉头车”）";
+
+		acctexts[20]="未按规定让行的（之十“超越正在超车的车”）"; 
+		acctexts[21]="未按规定让行的（之十一“会车时超车”）";
+		acctexts[22]="未按规定让行的（之十二“交叉路口超车”）";   
+		acctexts[23]="未按规定让行的（之十三“掉头时未让行”）";
+		acctexts[24]="未按规定让行的（之十四“进主路的车未让主路内的车”）";
+		acctexts[25]="未按规定让行的（之十五“辅路车未让出主路的车”）";
+		acctexts[26]="未按规定让行的（之十六“进出或穿越道路的车未让行”）";
+		acctexts[27]="未按规定让行的（之十七“进出停车泊位的车未让行”）";
+		acctexts[28]="未按规定让行的（之十八“进环路的车未让行”）";
+		acctexts[29]="未按规定让行的（之十九“有灯路口未让先被放行的车”）";
+
+		acctexts[30]="未按规定让行的（之二十“无灯路口未按标志标线让行”）";  
+		acctexts[31]="未按规定让行的（之二十一“无信号路口未让右侧道路来车先行”）";  
+		acctexts[32]="未按规定让行的（之 二十二“无信号路口转弯车未让直行车”）";
+		acctexts[33]="未按规定让行的（之二十三“无信号路口相对右转未让左转”）"; 
+		acctexts[34]="未按规定让行的（之二十四“未避让作业车辆”）";  
+		acctexts[35]="未按规定让行的（之二十五“有信号灯的路口右转未让被放行车辆”）  ";
+		acctexts[36]="未按规定让行的（之二十六“有信号灯的路口转弯未让直行的放行车辆”） "; 
+		acctexts[37]="依法应负全部责任的其他情形（之一“肇事逃逸”）";
+		acctexts[38]="依法应负全部责任的其他情形（之二“装载的飘散货物遗洒”）";
+		acctexts[39]="依法应负全部责任的其他情形（之三“未按规定装载”）";
+		acctexts[40]="依法应负全部责任的其他情形（之四“刮撞依法停放的车辆”）";
+		acctexts[41]="依法应负全部责任的其他情形（之五“右侧超车”）";
+		acctexts[42]="依法应负全部责任的其他情形（之六“单方事故”）";
+		
+		var filter="";
+		var CurrentCase;
+		function DoRefresh(){
+			$.getJSON(  "/workstation/list",
+			  {
+				  f:filter
+				 
+			  },
+			  function(data,textStatus){
+        		if (data.Suc){
+					var str=data.Msg;
+					var reg=new RegExp("\r\n","g");
+					$('#dg').datagrid({
+						data: data.Data
+						});
+					
+				}else{
+					alert(data.Msg);
+				}
+			  }
+			);
+
+			
+			
+		}
+		
+		function GetUserA_Html(obj){
+
+			var s="";
+			s+="电话:"+obj.UserA_Phone+"<BR>";
+			s+="驾驶证号:"+obj.UserA_LicenseNo+"<BR>";
+			s+="车号:"+obj.UserA_CarNo+"<BR>";
+			if (obj.UserA.PhotoCommitted ){
+				s+="认为的事故类型:"+acctexts[obj.UserA.AccIndex]+"<BR>";
+				s+=PictTexts[0]+":<img  src='/nojam/upload/"+obj.UserA.Pict0+"' /><BR>";
+				s+=PictTexts[1]+":<img  src='/nojam/upload/"+obj.UserA.Pict1+"' /><BR>";
+				s+=PictTexts[2]+":<img  src='/nojam/upload/"+obj.UserA.Pict2+"' /><BR>";
+				s+=PictTexts[3]+":<img  src='/nojam/upload/"+obj.UserA.Pict3+"' /><BR>";
+				s+=PictTexts[4]+":<img  src='/nojam/upload/"+obj.UserA.Pict4+"' /><BR>";
+			} else{
+				s+="照片未提交！</BR>"
+			}
+
+			if (obj.State=="已经拍照，等待审理")
+				s+='<a href="#" class="easyui-linkbutton" onclick="ShowHandleDialog();">审理</a>'; 
+			
+			return s;
+			
+		}
+		
+
+		function GetUserB_Html(obj){
+
+			var s="";
+			s+="电话:"+obj.UserB_Phone+"<BR>";
+			s+="驾驶证号:"+obj.UserB_LicenseNo+"<BR>";
+			s+="车号:"+obj.UserB_CarNo+"<BR>";
+			if (obj.UserB.PhotoCommitted ){
+			
+				s+="认为的事故类型:"+acctexts[obj.UserB.AccIndex]+"<BR>";
+				s+=PictTexts[0]+":<img  src='/nojam/upload/"+obj.UserB.Pict0+"' /><BR>";
+				s+=PictTexts[1]+":<img  src='/nojam/upload/"+obj.UserB.Pict1+"' /><BR>";
+				s+=PictTexts[2]+":<img  src='/nojam/upload/"+obj.UserB.Pict2+"' /><BR>";
+				s+=PictTexts[3]+":<img  src='/nojam/upload/"+obj.UserB.Pict3+"' /><BR>";
+				s+=PictTexts[4]+":<img  src='/nojam/upload/"+obj.UserB.Pict4+"' /><BR>";
+			} else{
+				s+="照片未提交！</BR>"
+			}
+
+			if (obj.State=="已经拍照，等待审理")
+				s+='<a href="#" class="easyui-linkbutton" onclick="ShowHandleDialog();">审理</a>'; 
+			
+			return s;
+			
+		}
+		function dg_SelectRow(rowIndex,rowData){
+			$.getJSON("/workstation/detail",
+				{
+					caseno:rowData.CaseNo
+				},
+				function(data,TextStatus){
+					if (data.Suc){
+						CurrentCase=data.Data
+						var s=JSON.stringify(data.Data);
+						//alert(s);
+						$("#detaildata").html(s);
+						$("#UserA").html(GetUserA_Html(CurrentCase));
+						$("#UserB").html(GetUserB_Html(CurrentCase));
+						
+					}else{
+						alert(data.Msg)
+					}
+				}
+			);
+		}
+
+		function HandleForm_OKButton_Click(){
+			$.getJSON("/workstation/setduty",
+			{
+				duty:$("#duty").val(),
+				caseno:CurrentCase.CaseNo
+			},
+			function(data,TextStatus){
+				if (data.Suc){
+					alert("审理完毕！");
+					$("#dlg").dialog("close");
+				}else{
+					alert(data.Msg);
+				}
+			})
+
+			
+		}
+
+		function HandleForm_CancelButton_Click()
+		{
+			//alert("cancel");
+			$("#dlg").dialog("close");
+		}
+
+		function ShowHandleDialog(){
+
+			var  s="报案人："+CurrentCase.UserA_CarNo+"  "+CurrentCase.UserA_Phone;
+			$("#UserA").html(s);
+			
+			s="涉案人："+CurrentCase.UserB_CarNo+"  "+CurrentCase.UserB_Phone;
+			$("#UserB").html(s);
+						
+
+			$("#dlg").dialog("open");
+			 
+        
+
+		}
+
+		function Page_Initialize(){
+			$("#dg").datagrid({
+				onSelect:dg_SelectRow
+			});
+			$("#dlg").dialog("close");
+			filter='all';
+			DoRefresh();
+
+			var map = new BMap.Map("allmap");            // 创建Map实例
+			var point = new BMap.Point(116.404, 39.915);    // 创建点坐标
+			map.centerAndZoom(point,15);                     // 初始化地图,设置中心点坐标和地图级别。
+			map.enableScrollWheelZoom();                            //启用滚轮放大缩小
+
+
+		}
+
+
+		$(document).ready(Page_Initialize);
+   
+
+
+	</script>
+
+	
+ </head>
+
+<body  class="easyui-layout">
+	<div data-options="region:'north',border:false" style="height:60px;background:#B3DFDA;padding:10px"><h1>交通事故快速处理警务工作站</h1></div>
+	<div data-options="region:'west',split:true,title:'功能树'" style="width:150px;padding:10px;">
+		<!--注释内容
+		<div style="padding:5px;border:1px solid #ddd">  
+		-->
+        <a onclick="filter='all';DoRefresh();" class="easyui-linkbutton" data-options="plain:true">全部</a><BR/>  
+		<a onclick="filter='created';DoRefresh();" class="easyui-linkbutton" data-options="plain:true">新报案，待确认</a><BR/>  
+		<a onclick="filter='confirmed';DoRefresh();" class="easyui-linkbutton" data-options="plain:true">已确认，待拍照</a><BR/>  
+    	<a onclick="filter='phototaken';DoRefresh();" class="easyui-linkbutton" data-options="plain:true">已拍照，待审理</a><BR/>  
+    	<a onclick="filter='handled';DoRefresh();" class="easyui-linkbutton" data-options="plain:true">已审理，待回复</a><BR/>  
+    	<a onclick="filter='spot';DoRefresh();" class="easyui-linkbutton" data-options="plain:true">要求现场处理</a><BR/>  
+    	
+    	<a onclick="filter='finished';DoRefresh();" class="easyui-linkbutton" data-options="plain:true">处理完毕</a><BR/>  
+    	
+    	
+		
+	</div>
+	<div data-options="region:'south',border:false" style="height:30px;background:#A9FACD;padding:10px;">中鸿信达，版权所有</div>
+	<div data-options="region:'center',title:''">
+					<div id="allmap"></div>
+    			
+    	
+		
+         
+	</div>
+	<div id="dlg" class="easyui-dialog" title="审理"  style="width:400px;height:240px;padding:10px">  
+        <div style="margin-top:10px;"><label id="UserA">UserA</label><BR/></div>
+        <div style="margin-top:10px;"><label id="UserB">UserB</label><BR/></div>
+        <div style="margin-top:25px;">
+        	<input id ="duty" class="easyui-slider" style="width:300px" data-options="showTip:true" /> 
+        	
+    	</div>
+        <div style="margin-top:20px;">
+        	<a class="easyui-linkbutton" onclick="HandleForm_OKButton_Click()">确定</a>
+        	<a class="easyui-linkbutton" onclick="HandleForm_CancelButton_Click()">取消</a>
+        	
+        </div>
+         
+    </div>  
+</body>
+</html>
